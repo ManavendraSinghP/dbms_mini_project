@@ -16,13 +16,13 @@
 *   **🪑 Smart 2D Seating Grid:** Dynamically generates visual seating arrangements conforming to a 3-4-3 classroom layout. Enforces a strict 1-seat gap rule and mathematically guarantees no two adjacent students are writing the same exam.
 *   **🎨 Dual Theming:** Beautiful UI seamlessly toggling between "Sakura Light" and "Sleek Dark" modes using Tailwind CSS v4.
 
-![2D Seating Grid Visualization](path/to/grid.png)
+![2D Seating Grid Visualization](images/grid.png)
 
 *   **📊 Interactive Analytics Dashboard:** Real-time visual widgets built with Recharts, displaying campus seat utilization, session distributions, and solver latency metrics.
 *   **🚨 Failure Engine Terminal:** A real-time diagnostic terminal integrated into the UI. If constraints cannot be met (e.g., Chromatic Overload or Capacity Shortage), the engine outputs exact, readable explanations rather than failing silently.
 *   **🔍 Global Unified Search:** Lightning-fast, fuzzy search engine to instantly locate students, courses, or rooms across the entire database.
 
-![Dynamic Themes](path/to/terminal.png)
+![Dynamic Themes](images/theme.png)
 
 ---
 

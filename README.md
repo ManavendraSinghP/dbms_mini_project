@@ -8,7 +8,7 @@
 
 > A highly optimized, full-stack scheduling and seating allocation system designed to automate academic exam planning. It features an advanced constraint-solving engine to prevent exam overlaps and enforce strict spatial distancing in examination halls.
 
-![Main Dashboard View](path/to/hero-image.png)
+![Main Dashboard View](ManavendraSinghP/dbms_mini_project/images/dashboard.png)
 
 ## ✨ Core Features
 

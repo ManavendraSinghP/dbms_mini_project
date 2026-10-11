@@ -1,0 +1,3 @@
+@echo off
+echo Opening React Dashboard...
+start http://localhost:5173

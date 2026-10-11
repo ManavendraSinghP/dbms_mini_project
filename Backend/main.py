@@ -22,7 +22,8 @@ app = FastAPI(
 # Configure Cross-Origin Resource Sharing (CORS) for React / Frontend clients
 origins = [
     "http://localhost:5173",
-    "https://manavendra-dbms-miniproject.onrender.com"
+    "https://YOUR-FRONTEND-NAME.onrender.com"  # Replace this with your actual Render static site URL
+]
 
 app.add_middleware(
     CORSMiddleware,

@@ -1,9 +1,13 @@
 import time
-from fastapi import FastAPI, Depends, Query, status
+from fastapi import FastAPI, Depends, Query, status, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from sqlalchemy import func
+from pydantic import BaseModel
+from typing import Optional
+from datetime import timedelta
 
 from database import get_db
 from models import Student, Course, Room, ExamSession, Building, Batch, SeatingAllocation, ExamTimetable, AdminUser
@@ -13,6 +17,7 @@ from schemas import (
     RoomSearchOut, RoomSeatingResponse, SeatGridCell
 )
 from solver import ExamSolverEngine, SolverException
+from auth import verify_password, create_access_token, get_current_admin, ACCESS_TOKEN_EXPIRE_MINUTES
 
 app = FastAPI(
     title="Christ University Delhi-NCR - Exam Timetable & Seating Planner",
@@ -284,16 +289,6 @@ def get_all_rooms(db: Session = Depends(get_db)):
         for r in rooms
     ]
 
-
-from fastapi import Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordRequestForm
-from pydantic import BaseModel
-from typing import Optional
-from auth import verify_password, create_access_token, get_current_admin, ACCESS_TOKEN_EXPIRE_MINUTES
-from datetime import timedelta
-
-
-# Ensure Student, AdminUser models and db session are imported
 
 # --- Pydantic Schemas ---
 class Token(BaseModel):

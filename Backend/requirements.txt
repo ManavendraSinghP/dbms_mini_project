@@ -6,3 +6,4 @@ python-dotenv
 pydantic
 networkx
 ortools
+python-jose[cryptography]

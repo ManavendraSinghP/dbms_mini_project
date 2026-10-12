@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import func
 
 from database import get_db
-from models import Student, Course, Room, ExamSession, Building, Batch, SeatingAllocation, ExamTimetable
+from models import Student, Course, Room, ExamSession, Building, Batch, SeatingAllocation, ExamTimetable, AdminUser
 from schemas import (
     GenerateTimetableRequest, GenerateTimetableResponse,
     SearchResultsResponse, StudentSearchOut, CourseSearchOut,

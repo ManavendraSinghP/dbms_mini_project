@@ -104,4 +104,4 @@ export default function AdminDashboard() {
                 <th className="p-4 font-medium">Reg No</th>
                 <th className="p-4 font-medium">Full Name</th>
                 <th className="p-4 font-medium">Batch ID</th>
-                <th className="p-4 font-medium text-right">
+                <th className="p-4 font-medium text-right">Actions</th>

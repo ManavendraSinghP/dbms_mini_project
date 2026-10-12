@@ -43,4 +43,4 @@ export default function Login() {
       <div className="w-full max-w-md p-8 bg-white dark:bg-gray-900 shadow-xl rounded-2xl border border-pink-100 dark:border-gray-800">
         <div className="flex flex-col items-center mb-8">
           <div className="p-3 bg-pink-100 dark:bg-gray-800 rounded-full mb-4">
-            <Lock className="w-6 h-6 text-pink-6>
+            <Lock className="w-6 h-6 text-pink-600 dark:text-pink-400" />

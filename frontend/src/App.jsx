@@ -1,8 +1,19 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Search, Moon, Sun, Play, Server, AlertCircle, LayoutGrid, X, Users, MapPin } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip as RechartsTooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 
-export default function App() {
+import Login from './Login';
+import AdminDashboard from './AdminDashboard';
+
+// --- ROUTING SECURITY ---
+const ProtectedRoute = ({ children }) => {
+  const token = localStorage.getItem('admin_token');
+  return token ? children : <Navigate to="/login" replace />;
+};
+
+// --- YOUR EXISTING DASHBOARD ---
+function MainDashboard() {
   const [isDark, setIsDark] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState(null);
@@ -144,7 +155,6 @@ export default function App() {
     return acc;
   }, {});
 
-  // FORCE MAX 5 SLOTS FOR THE CHART
   const sessionChartData = timetableData?.slice(0, 5).map((s, i) => ({
     name: `Slot ${i + 1}`,
     courses: s.courses.length,
@@ -362,7 +372,6 @@ export default function App() {
           <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 shadow-sm border border-pink-100 dark:border-gray-800">
             <h2 className="font-bold text-xl mb-4">Generated Timetable Matrix</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-              {/* FORCE MAX 5 SLOTS FOR THE MATRIX */}
               {timetableData.slice(0, 5).map((slot, idx) => (
                 <div key={idx} className="border border-pink-100 dark:border-gray-700 rounded-xl p-4 bg-pink-50/50 dark:bg-gray-800/50 hover:border-rose-300 dark:hover:border-indigo-500 transition-colors cursor-pointer" onClick={() => setViewerSession(slot.session_id)}>
                    <div className="flex justify-between items-center mb-2">
@@ -481,5 +490,31 @@ export default function App() {
 
       </main>
     </div>
+  );
+}
+
+// --- THE NEW APP COMPONENT WITH ROUTING ---
+export default function App() {
+  return (
+    <BrowserRouter>
+      {/*
+        This div is necessary to ensure the background color and dark mode
+        transitions seamlessly across all routes
+      */}
+      <div className="min-h-screen bg-pink-50 dark:bg-gray-950 transition-colors duration-300">
+        <Routes>
+          <Route path="/" element={<MainDashboard />} />
+          <Route path="/login" element={<Login />} />
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute>
+                <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </div>
+    </BrowserRouter>
   );
 }

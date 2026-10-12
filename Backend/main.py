@@ -22,7 +22,7 @@ app = FastAPI(
 # Configure Cross-Origin Resource Sharing (CORS) for React / Frontend clients
 origins = [
     "http://localhost:5173",
-    "https://YOUR-FRONTEND-NAME.onrender.com"  # Replace this with your actual Render static site URL
+    "https://manavendra-dbms-miniproject.onrender.com"  # Replace this with your actual Render static site URL
 ]
 
 app.add_middleware(
@@ -283,3 +283,86 @@ def get_all_rooms(db: Session = Depends(get_db)):
         {"room_id": r.room_id, "room_number": r.room_number, "building_name": r.building_name}
         for r in rooms
     ]
+
+
+from fastapi import Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordRequestForm
+from pydantic import BaseModel
+from typing import Optional
+from auth import verify_password, create_access_token, get_current_admin, ACCESS_TOKEN_EXPIRE_MINUTES
+from datetime import timedelta
+
+
+# Ensure Student, AdminUser models and db session are imported
+
+# --- Pydantic Schemas ---
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
+class StudentCreate(BaseModel):
+    register_no: str
+    full_name: str
+    batch_id: int
+
+
+class StudentUpdate(BaseModel):
+    register_no: Optional[str] = None
+    full_name: Optional[str] = None
+    batch_id: Optional[int] = None
+
+
+# --- Login Route ---
+@app.post("/api/login", response_model=Token)
+def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+    admin = db.query(AdminUser).filter(AdminUser.username == form_data.username).first()
+    if not admin or not verify_password(form_data.password, admin.hashed_password):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect username or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = create_access_token(
+        data={"sub": admin.username}, expires_delta=access_token_expires
+    )
+    return {"access_token": access_token, "token_type": "bearer"}
+
+
+# --- Protected CRUD Routes ---
+@app.post("/api/students", status_code=status.HTTP_201_CREATED)
+def create_student(student: StudentCreate, db: Session = Depends(get_db),
+                   admin: AdminUser = Depends(get_current_admin)):
+    db_student = Student(**student.model_dump())
+    db.add(db_student)
+    db.commit()
+    db.refresh(db_student)
+    return db_student
+
+
+@app.put("/api/students/{student_id}")
+def update_student(student_id: int, student_update: StudentUpdate, db: Session = Depends(get_db),
+                   admin: AdminUser = Depends(get_current_admin)):
+    db_student = db.query(Student).filter(Student.student_id == student_id).first()
+    if not db_student:
+        raise HTTPException(status_code=404, detail="Student not found")
+
+    update_data = student_update.model_dump(exclude_unset=True)
+    for key, value in update_data.items():
+        setattr(db_student, key, value)
+
+    db.commit()
+    db.refresh(db_student)
+    return db_student
+
+
+@app.delete("/api/students/{student_id}")
+def delete_student(student_id: int, db: Session = Depends(get_db), admin: AdminUser = Depends(get_current_admin)):
+    db_student = db.query(Student).filter(Student.student_id == student_id).first()
+    if not db_student:
+        raise HTTPException(status_code=404, detail="Student not found")
+
+    db.delete(db_student)
+    db.commit()
+    return {"message": f"Student {student_id} successfully removed."}

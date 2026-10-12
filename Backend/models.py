@@ -149,3 +149,14 @@ class SeatingAllocation(Base):
     timetable = relationship("ExamTimetable", back_populates="allocations")
     student = relationship("Student", back_populates="allocations")
     room = relationship("Room", back_populates="allocations")
+
+
+from sqlalchemy import Column, Integer, String
+# Ensure Base is imported from your database.py
+
+class AdminUser(Base):
+    __tablename__ = "admin_users"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    username = Column(String(50), unique=True, nullable=False, index=True)
+    hashed_password = Column(String(255), nullable=False)

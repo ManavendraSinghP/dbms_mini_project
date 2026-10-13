@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { Search, Moon, Sun, Play, Server, AlertCircle, LayoutGrid, X, Users, MapPin } from 'lucide-react';
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { Search, Moon, Sun, Play, Server, AlertCircle, LayoutGrid, X, Users, MapPin, Lock } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip as RechartsTooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 
 import Login from './Login';
@@ -14,6 +14,7 @@ const ProtectedRoute = ({ children }) => {
 
 // --- YOUR EXISTING DASHBOARD ---
 function MainDashboard() {
+  const navigate = useNavigate();
   const [isDark, setIsDark] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState(null);
@@ -214,9 +215,19 @@ function MainDashboard() {
             )}
           </div>
 
-          <button onClick={() => setIsDark(!isDark)} className="p-2 rounded-full hover:bg-pink-100 dark:hover:bg-gray-800 transition-colors bg-pink-100 dark:bg-gray-800">
-            {isDark ? <Sun className="w-5 h-5 text-amber-400" /> : <Moon className="w-5 h-5 text-rose-900" />}
-          </button>
+          <div className="flex items-center space-x-3">
+            {/* Admin Panel Navigation Button */}
+            <button
+              onClick={() => navigate('/login')}
+              className="flex items-center gap-1.5 px-3.5 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-sm font-medium transition shadow-sm"
+            >
+              <Lock className="w-4 h-4" /> Admin Panel
+            </button>
+
+            <button onClick={() => setIsDark(!isDark)} className="p-2 rounded-full hover:bg-pink-100 dark:hover:bg-gray-800 transition-colors bg-pink-100 dark:bg-gray-800">
+              {isDark ? <Sun className="w-5 h-5 text-amber-400" /> : <Moon className="w-5 h-5 text-rose-900" />}
+            </button>
+          </div>
         </div>
       </header>
 
@@ -324,7 +335,7 @@ function MainDashboard() {
               <h2 className="font-semibold text-lg mb-4 flex items-center"><Server className="w-5 h-5 mr-2" /> Solver Controls</h2>
               <label className="flex items-center space-x-3 cursor-pointer mb-6 text-sm">
                 <input type="checkbox" checked={relaxCapacity} onChange={() => setRelaxCapacity(!relaxCapacity)} className="form-checkbox rounded text-rose-500 focus:ring-rose-500 bg-pink-100 dark:bg-gray-800 border-transparent w-5 h-5" />
-                <span>Relax Capacity Limits (Test Mode)</span>
+                <span>Relax Capacity Limits</span>
               </label>
             </div>
 
@@ -493,14 +504,10 @@ function MainDashboard() {
   );
 }
 
-// --- THE NEW APP COMPONENT WITH ROUTING ---
+// --- THE APP COMPONENT WITH ROUTING ---
 export default function App() {
   return (
     <BrowserRouter>
-      {/*
-        This div is necessary to ensure the background color and dark mode
-        transitions seamlessly across all routes
-      */}
       <div className="min-h-screen bg-pink-50 dark:bg-gray-950 transition-colors duration-300">
         <Routes>
           <Route path="/" element={<MainDashboard />} />

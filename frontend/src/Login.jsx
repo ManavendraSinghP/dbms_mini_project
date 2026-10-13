@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Lock } from 'lucide-react';
+import { Lock, Home } from 'lucide-react';
 
 export default function Login() {
   const [username, setUsername] = useState('');
@@ -38,7 +38,15 @@ export default function Login() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
+    <div className="flex items-center justify-center min-h-screen relative p-4">
+      {/* Back to Home Button */}
+      <button
+        onClick={() => navigate('/')}
+        className="absolute top-6 left-6 flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-900 border border-pink-200 dark:border-gray-800 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-pink-50 dark:hover:bg-gray-800 transition shadow-sm"
+      >
+        <Home size={16} /> Home
+      </button>
+
       <div className="w-full max-w-md p-8 bg-white dark:bg-gray-900 shadow-xl rounded-2xl border border-pink-100 dark:border-gray-800">
         <div className="flex flex-col items-center mb-8">
           <div className="p-3 bg-pink-100 dark:bg-gray-800 rounded-full mb-4">

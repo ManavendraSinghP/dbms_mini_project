@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { LogOut, Plus, Edit2, Trash2, X } from 'lucide-react';
+import { LogOut, Plus, Edit2, Trash2, X, Home } from 'lucide-react';
 
 export default function AdminDashboard() {
   const [students, setStudents] = useState([]);
@@ -78,9 +78,20 @@ export default function AdminDashboard() {
     <div className="p-8 max-w-6xl mx-auto">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold text-gray-800 dark:text-pink-50">Database Admin</h1>
-        <button onClick={handleLogout} className="flex items-center gap-2 px-4 py-2 text-sm text-red-600 bg-red-50 dark:bg-red-900/20 dark:text-red-400 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/40 transition">
-          <LogOut size={16} /> Logout
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => navigate('/')}
+            className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 bg-white dark:bg-gray-900 border border-pink-200 dark:border-gray-800 rounded-lg hover:bg-pink-50 dark:hover:bg-gray-800 transition shadow-sm"
+          >
+            <Home size={16} /> Home
+          </button>
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-2 px-4 py-2 text-sm text-red-600 bg-red-50 dark:bg-red-900/20 dark:text-red-400 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/40 transition"
+          >
+            <LogOut size={16} /> Logout
+          </button>
+        </div>
       </div>
 
       <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-pink-100 dark:border-gray-800 overflow-hidden">
